@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Black Border Outline (Same) -->
+  <path fill="#000000" d="M5 0h6v1h2v1h2v2h1v8h-1v2h-2v1h-2v1H5v-1H3v-1H1v-2H0V4h1V2h2V1h2V0z"/>
+  
+  <!-- Main Gold Body (Same) -->
+  <path fill="#FFC000" d="M5 1h6v1h2v2h1v8h-1v2h-2v1H5v-1H3v-2H2V4h1V2h2V1z"/>
+  
+  <!-- Shine (Same) -->
+  <path fill="#FFFF00" d="M5 1h6v1H5z M3 2h2v1H3z M2 4h1v2H2z"/>
+  
+  <!-- Shadow (Same) -->
+  <path fill="#A06000" d="M13 4h1v8h-1z M11 12h2v1h-2z M5 13h6v1H5z"/>
+
+  <!-- EXTRA BOLD & TALL DOLLAR SIGN -->
+  
+  <!-- The 'S' Shape (Centered) - Keep SAME -->
+  <path fill="#000000" d="M6 3h4v2H6z"/> <!-- Top Cap -->
+  <path fill="#000000" d="M5 4h2v3H5z"/> <!-- Top Left Block -->
+  <path fill="#000000" d="M6 6h4v1H6z"/> <!-- Mid Bar -->
+  <path fill="#000000" d="M9 6h2v3H9z"/> <!-- Bot Right Block -->
+  <path fill="#000000" d="M6 8h4v2H6z"/> <!-- Bot Cap -->
+
+  <!-- Vertical Line (Optimized) -->
+  <!-- Top Extension: Shortened by 1px (Start Y=2 instead of 1) -->
+  <path fill="#000000" d="M7 2h2v2H7z"/> 
+  <!-- Bottom Extension: Keep Same -->
+  <path fill="#000000" d="M7 9h2v3H7z"/>
+</svg>

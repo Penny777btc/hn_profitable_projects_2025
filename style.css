@@ -211,6 +211,7 @@ html {
     overflow: auto;
     display: flex;
     flex-direction: column;
+    font-size: 14px;
 }
 
 /* Small Biz Manager Layout */
@@ -274,17 +275,23 @@ thead {
 
 th {
     text-align: left;
-    padding: 4px;
+    padding: 6px 8px;
     border: 1px solid var(--win-gray);
     background: var(--win-bg);
-    font-weight: normal;
+    font-weight: bold;
+    font-size: 13px;
 }
 
 td {
-    padding: 4px;
+    padding: 6px 6px;
     border-right: 1px solid #eee;
     cursor: pointer;
     white-space: nowrap;
+    font-size: 14px;
+}
+
+td strong {
+    font-size: 15px;
 }
 
 tr:nth-child(even) {
@@ -342,6 +349,7 @@ tr.selected {
 .hidden {
     display: none !important;
 }
+
 .resize-handle {
     width: 16px;
     height: 16px;
@@ -352,6 +360,7 @@ tr.selected {
     background: transparent;
     z-index: 100;
 }
+
 .resize-handle::after {
     content: '';
     position: absolute;
@@ -364,3 +373,251 @@ tr.selected {
     border-color: transparent transparent #808080 transparent;
 }
 
+/* Mobile Responsiveness */
+/* Mobile Responsiveness - Card Layout Transformation */
+@media (max-width: 768px) {
+    #desktop {
+        padding: 10px;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+    }
+
+    /* Windows become stacked blocks */
+    .window {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        left: auto !important;
+        top: auto !important;
+        margin-bottom: 20px;
+        transform: none !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .window-content {
+        overflow: visible;
+        /* Let content flow */
+        height: auto;
+    }
+
+    /* Ensure Program Manager stays at top if possible, or just natural flow */
+    /* We can use order flex property if we knew the ID, but default stacking is fine. */
+
+    /* Layout Adjustments */
+    .biz-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .tree-view {
+        width: 100%;
+        height: auto;
+        max-height: 150px;
+        border-right: none;
+        border-bottom: 2px solid var(--win-white);
+        margin-bottom: 15px;
+        background: #f0f0f0;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    .list-view-container {
+        height: auto;
+        overflow: visible;
+    }
+
+    .list-view {
+        overflow: visible;
+        height: auto;
+    }
+
+    /* --- TABLE TO CARD TRANSFORMATION --- */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead {
+        display: none;
+    }
+
+    /* Hide headers */
+
+    tr {
+        background: white;
+        margin-bottom: 16px;
+        border: 2px solid var(--win-gray);
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        position: relative;
+        border-radius: 2px;
+    }
+
+    tr:active {
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        transform: translate(2px, 2px);
+    }
+
+    td {
+        padding: 4px 0;
+        border: none;
+        white-space: normal;
+        text-align: left;
+    }
+
+    /* Name (Col 1) */
+    td:nth-child(1) {
+        font-size: 18px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+        display: flex;
+        align-items: center;
+        color: #000;
+    }
+
+    td:nth-child(1) strong {
+        font-size: 18px;
+    }
+
+    /* Revenue (Col 2) */
+    td:nth-child(2) {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        font-weight: bold;
+        color: #fff;
+        background: #008000;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Category (Col 3) */
+    td:nth-child(3) {
+        display: inline-block;
+        margin-right: 12px;
+        font-size: 14px;
+        color: #555;
+        background: #eee;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-bottom: 6px;
+    }
+
+    /* Year (Col 4) */
+    td:nth-child(4) {
+        display: inline-block;
+        font-size: 14px;
+        color: #555;
+        background: #eee;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+
+    /* Description (Col 5) */
+    td:nth-child(5) {
+        margin-top: 10px;
+        display: block;
+        color: #333;
+        line-height: 1.5;
+        font-size: 15px;
+    }
+
+    /* Hide resize handles */
+    .resize-handle {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .details-window {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 90% !important;
+        height: auto !important;
+        max-height: 85vh !important;
+        z-index: 10000 !important;
+        margin: 0 !important;
+        box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .details-window .window-content {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+}
+
+/* Read Me / Help Docs Styling */
+.section-title {
+    font-size: 14px;
+    /* Win 3.1 used smaller, crisp fonts */
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    color: #000;
+    /* Black usually, blue is for links */
+    font-family: "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0;
+}
+
+.section-body p {
+    margin-bottom: 10px;
+    line-height: 1.4;
+    font-family: "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+    font-size: 13px;
+    /* 13px is closer to non-aliased 8pt/10pt look */
+}
+
+.custom-list {
+    list-style: none;
+    padding-left: 5px;
+    font-family: "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+    font-size: 13px;
+}
+
+.custom-list li {
+    margin-bottom: 8px;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.4;
+}
+
+.custom-list li::before {
+    content: "■";
+    font-size: 8px;
+    position: absolute;
+    left: 0;
+    /* Align bullet */
+    top: 3px;
+    color: #000;
+}
+
+.win-hr {
+    border: 0;
+    border-bottom: 1px solid #808080;
+    /* Shadow */
+    border-top: 1px solid #fff;
+    /* Highlight - 3D line */
+    margin: 10px 0;
+}
+
+.help-content-wrapper {
+    padding: 15px;
+    background: white;
+    min-height: 100%;
+}

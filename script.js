@@ -1,4 +1,3 @@
-
 // Global State
 let zIndexCounter = 100;
 let windows = [];
@@ -17,7 +16,34 @@ const UI = {
         detailsLabels: { name: "Name:", cat: "Category:", rev: "Revenue:", year: "Year:", fac: "Factors:", desc: "Description:" },
         toggleBtn: "中文",
         noData: "No projects found for",
-        allTags: "All Categories"
+        allTags: "All Categories",
+        readme: {
+            title: "About HN500",
+            content: `
+                <h2 class="section-title">Data Source</h2>
+                <div class="section-body">
+                    <p>Curated from Hacker News threads <strong>"Ask HN: What are your successful side projects?"</strong> (2017-2025).</p>
+                    <p>We filtered thousands of comments to feature only <strong>verified profitable ($500+/mo)</strong> projects.</p>
+                </div>
+                
+                <hr class="win-hr">
+
+                <h2 class="section-title">Key Insights</h2>
+                <ul class="custom-list">
+                    <li><strong>Niche is King</strong><br>Profitable projects often solve boring, specific problems (e.g., "Online Fax").</li>
+                    <li><strong>Solo Founders</strong><br>90% of listed projects are built and maintained by 1-2 people.</li>
+                    <li><strong>Utility > Hype</strong><br>Success comes from solving real problems, not chasing tech trends.</li>
+                </ul>
+
+                <hr class="win-hr">
+
+                <h2 class="section-title">About Site</h2>
+                <div class="section-body">
+                    <p>A retro Windows 3.1 tribute.</p>
+                    <p><i>Made by Penny</i></p>
+                </div>
+            `
+        }
     },
     cn: {
         searchLabel: "搜索:",
@@ -28,8 +54,54 @@ const UI = {
         detailsLabels: { name: "名称:", cat: "分类:", rev: "收入:", year: "年份:", fac: "关键因素:", desc: "描述:" },
         toggleBtn: "English",
         noData: "该年份暂无项目:",
-        allTags: "所有分类"
+        allTags: "所有分类",
+        readme: {
+            title: "关于 HN500",
+            content: `
+                <h2 class="section-title">数据来源</h2>
+                <div class="section-body">
+                    <p>数据精选自 Hacker News 帖子 <strong>"Ask HN: What are your successful side projects?"</strong> (2017-2025)。</p>
+                    <p>我们筛选了数千条评论，只保留那些<strong>已验证盈利 ($500+/月)</strong> 的项目。</p>
+                </div>
+                
+                <hr class="win-hr">
+
+                <h2 class="section-title">核心洞察</h2>
+                <ul class="custom-list">
+                    <li><strong>垂直为王 (Niche is King)</strong><br>最赚钱的项目往往解决具体痛点（如“在线传真”），而非宏大平台。</li>
+                    <li><strong>单兵作战 (Solo Founders)</strong><br>90% 的上榜项目由 1-2 人开发并维护。</li>
+                    <li><strong>实用至上 (Utility > Hype)</strong><br>赚钱的项目往往不追逐热点，而是提供实打实的功能价值。</li>
+                </ul>
+
+                <hr class="win-hr">
+
+                <h2 class="section-title">关于本站</h2>
+                <div class="section-body">
+                    <p>一个致敬 Windows 3.1 的复古风格展示页。</p>
+                    <p><i>Made by Penny</i></p>
+                </div>
+            `
+        }
     }
+};
+
+window.openReadMe = function () {
+    const data = UI[currentLang].readme;
+    if (!data) return;
+    createWindow({
+        title: data.title,
+        width: '500px',
+        height: '500px',
+        className: 'details-window',
+        content: `
+            <div class="help-content-wrapper">
+                ${data.content}
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="outset" onclick="this.closest('.window').remove()" style="padding: 5px 25px; cursor:pointer; font-weight:bold;">OK</button>
+                </div>
+            </div>
+        `
+    });
 };
 
 // Audio Context for Beeps
@@ -54,9 +126,15 @@ function createWindow(config) {
     const winId = 'win-' + Math.random().toString(36).substr(2, 9);
     const win = document.createElement('div');
     win.id = winId;
-    win.className = 'window outset';
-    win.style.left = (50 + (windows.length * 25)) + 'px';
-    win.style.top = (50 + (windows.length * 25)) + 'px';
+    win.className = 'window outset ' + (config.className || '');
+
+    const defaultX = 50 + (windows.length * 20);
+    const defaultY = 50 + (windows.length * 20);
+    const posX = config.x !== undefined ? config.x : defaultX;
+    const posY = config.y !== undefined ? config.y : defaultY;
+
+    win.style.left = posX + 'px';
+    win.style.top = posY + 'px';
     win.style.width = config.width || '400px';
     win.style.height = config.height || '300px';
     win.style.zIndex = ++zIndexCounter;
@@ -70,11 +148,11 @@ function createWindow(config) {
                 <div class="win-btn outset close-btn">■</div>
             </div>
         </div>
-        ${config.menu ? `<div class="menu-bar">${config.menu.map(m => `<div class="menu-item"><span>${m}</span></div>`).join('')}</div>` : ''}
-        <div class="window-content inset">
-            ${config.content}
-        </div>
-    `;
+    ${config.menu ? `<div class="menu-bar">${config.menu.map(m => `<div class="menu-item"><span>${m}</span></div>`).join('')}</div>` : ''}
+<div class="window-content inset">
+    ${config.content}
+</div>
+`;
 
     document.body.appendChild(win);
 
@@ -287,8 +365,8 @@ function populateTags(win) {
     const currentVal = select.value;
     const tags = [...new Set(FLAT_DATA.map(p => p.tag))].sort();
 
-    select.innerHTML = `<option value="">${UI[currentLang].allTags}</option>` +
-        tags.map(t => `<option value="${t}">${t}</option>`).join('');
+    select.innerHTML = `< option value = "" > ${UI[currentLang].allTags}</option > ` +
+        tags.map(t => `< option value = "${t}" > ${t}</option > `).join('');
 
     // Restore value if possible
     if (tags.includes(currentVal)) {
@@ -304,10 +382,17 @@ function openProjectsShowcase() {
     if (activeYear === "All Years" && currentLang === 'cn') activeYear = "全部年份";
     if (activeYear === "全部年份" && currentLang === 'en') activeYear = "All Years";
 
+    const w = 1000;
+    const h = 650;
+    const x = Math.max(0, (window.innerWidth - w) / 2);
+    const y = Math.max(0, (window.innerHeight - h) / 2);
+
     createWindow({
         title: "HN500",
-        width: '850px',
-        height: '500px',
+        width: w + 'px',
+        height: h + 'px',
+        x: x,
+        y: y,
         menu: ["File", "View", "Help"],
         content: `
             <div class="biz-container">
@@ -334,7 +419,7 @@ function openProjectsShowcase() {
                     </div>
                 </div>
             </div>
-        `,
+    `,
         onRender: (win) => {
             renderTree(win);
             updateHeaderIcons(win);
@@ -486,8 +571,9 @@ window.openDetails = (id) => {
 
     createWindow({
         title: `Details - ${escapeHtml(project.name)}`,
-        width: '400px',
-        height: '320px',
+        className: 'details-window',
+        width: '500px',
+        height: '420px',
         content: `
             <div class="details-grid">
                 <div class="label">${labels.name}</div><div>${escapeHtml(project.name)}</div>
@@ -608,7 +694,9 @@ function openProgramManager() {
     createWindow({
         title: "Program Manager",
         width: '400px',
-        height: '280px',
+        height: '300px',
+        x: 150,
+        y: 150,
         menu: ["File", "Options", "Window", "Help"],
         content: `
             <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 10px;">
@@ -619,10 +707,8 @@ function openProgramManager() {
                     <div class="icon-label">HN500</div>
                 </div>
                 <!-- Read Me Mockup -->
-                <div class="desktop-icon" onclick="createDialog('ReadMe.txt', 'This project showcases profitable side projects from Hacker News threads (2017-2025).<br><br>Built with Vanilla JS.', 'info')" style="color: black; text-shadow: none;">
-                    <div class="icon-graphic">
-                        <svg viewBox="0 0 32 32"><path d="M6 4h16l6 6v18H6z" fill="#fff"/><path d="M6 4h16v6h6" fill="none" stroke="#000" stroke-width="1"/><path d="M10 14h12M10 18h12M10 22h8" stroke="#000" stroke-width="1"/></svg>
-                    </div>
+                <div class="desktop-icon" onclick="openReadMe()">
+                    <img src="https://win98icons.alexmeub.com/icons/png/notepad-2.png" alt="Read Me">
                     <div class="icon-label">Read Me</div>
                 </div>
                 <!-- Minesweeper Mockup -->
