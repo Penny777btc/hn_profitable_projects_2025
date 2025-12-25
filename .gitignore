@@ -1,0 +1,6 @@
+.DS_Store
+hn_thread.html
+extract_projects.py
+check_syntax.js
+*.pyc
+__pycache__

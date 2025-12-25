@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutalist Concrete Logic - VibeUI</title>
+    <style>
+        body { margin: 0; padding: 0; background: #09090b; min-height: 100vh; display: grid; place-items: center; color: white; font-family: sans-serif; }
+    </style>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONCRETE_SKELETON // L0-SYSTEM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ececec;
+            --ink: #000000;
+            --accent: #ff4d00;
+            --grid-line: rgba(0,0,0,0.15);
+            --border-heavy: 2px solid var(--ink);
+            --border-light: 1px solid var(--ink);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.2;
+            overflow-x: hidden;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* GRAIN OVERLAY */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3ExternalIcon %3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            font-weight: 700;
+            line-height: 0.9;
+        }
+
+        /* UTILITY */
+        .f-right { text-align: right; }
+        .f-mono { font-family: 'Space Mono', monospace; }
+        .bg-ink { background: var(--ink); color: var(--bg); }
+        .text-accent { color: var(--accent); }
+        .strikethrough { text-decoration: line-through; }
+
+        /* GRID SYSTEM */
+        .master-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            width: 100%;
+            border-left: var(--border-light);
+            border-right: var(--border-light);
+        }
+
+        .cell {
+            border-bottom: var(--border-light);
+            border-right: var(--border-light);
+            padding: 20px;
+            position: relative;
+        }
+
+        /* HEADER / NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: var(--border-heavy);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo { font-weight: 700; font-size: 1.2rem; }
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            margin-left: 30px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* HERO SECTION */
+        .hero {
+            height: 90vh;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+        }
+
+        .hero-title {
+            grid-column: 1 / 10;
+            grid-row: 2 / 7;
+            font-size: clamp(4rem, 15vw, 12rem);
+            padding: 20px;
+            border-bottom: var(--border-heavy);
+            border-right: var(--border-heavy);
+            display: flex;
+            align-items: flex-end;
+            background: #fff;
+            z-index: 2;
+        }
+
+        .hero-sub {
+            grid-column: 7 / 13;
+            grid-row: 7 / 11;
+            padding: 20px;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hero-meta {
+            grid-column: 1 / 5;
+            grid-row: 7 / 13;
+            border-right: var(--border-light);
+            padding: 20px;
+            font-size: 0.75rem;
+        }
+
+        /* MANIFESTO SECTION */
+        .manifesto {
+            border-bottom: var(--border-heavy);
+            padding: 80px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .manifesto h2 { font-size: 4rem; max-width: 500px; }
+        .manifesto-text { font-size: 1.5rem; letter-spacing: -0.02em; }
+
+        /* FEATURE GRID */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .feature-item {
+            border-right: var(--border-light);
+            border-bottom: var(--border-light);
+            padding: 40px 20px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-item:hover {
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        .feature-item:nth-child(4n) { border-right: none; }
+
+        .feature-num {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 40px;
+        }
+
+        /* DATA SECTION */
+        .data-dense {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            border-bottom: var(--border-heavy);
+        }
+
+        .data-sidebar {
+            border-right: var(--border-heavy);
+            padding: 20px;
+            font-size: 0.7rem;
+            background: #ddd;
+        }
+
+        .data-content {
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .data-cell {
+            padding: 20px;
+            border-bottom: var(--border-light);
+            border-right: var(--border-light);
+        }
+
+        /* PRICING TABLE */
+        .pricing {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 80px 0;
+        }
+
+        .pricing th, .pricing td {
+            border: var(--border-light);
+            padding: 30px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .pricing th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+        }
+
+        .price-val {
+            font-size: 4rem;
+            font-weight: 700;
+            display: block;
+            margin-top: 20px;
+        }
+
+        /* BUTTONS */
+        .btn-raw {
+            display: inline-block;
+            padding: 15px 30px;
+            border: var(--border-heavy);
+            background: transparent;
+            color: var(--ink);
+            text-transform: uppercase;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.1s;
+            margin-top: 20px;
+        }
+
+        .btn-raw:hover {
+            background: var(--ink);
+            color: var(--bg);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--accent);
+        }
+
+        /* DIAGRAM COMPONENT */
+        .diagram-container {
+            padding: 100px 20px;
+            background: #fff;
+            border-bottom: var(--border-heavy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-svg {
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 100px 20px;
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .big-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--bg);
+            color: var(--bg);
+            font-family: inherit;
+            font-size: 2rem;
+            width: 100%;
+            padding: 10px 0;
+            outline: none;
+        }
+
+        .scroll-text {
+            white-space: nowrap;
+            overflow: hidden;
+            border-bottom: var(--border-heavy);
+            border-top: var(--border-heavy);
+            padding: 10px 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .scroll-inner {
+            display: inline-block;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .hero-title { grid-column: 1 / 13; font-size: 5rem; }
+            .hero-sub { grid-column: 1 / 13; grid-row: 8 / 13; }
+            .hero-meta { display: none; }
+            .manifesto { grid-template-columns: 1fr; }
+            .features { grid-template-columns: 1fr 1fr; }
+            .data-content { grid-template-columns: 1fr; }
+            .pricing th { font-size: 1.2rem; }
+            .price-val { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">SKELETON_01</div>
+        <div class="nav-links">
+            <a href="#">System</a>
+            <a href="#">Protocols</a>
+            <a href="#">Access</a>
+            <a href="#" class="text-accent">[ AUTH ]</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-title">
+            RAW<br>STRUC<br>TURE.
+        </div>
+        <div class="hero-meta">
+            <p>[ BUILD_ID: 9920-X ]</p>
+            <p>[ STATUS: OPERATIONAL ]</p>
+            <p>[ LOCATION: NULL_SPACE ]</p>
+            <br><br>
+            <p>A digital brutalist framework built for high-performance information density. No fluff. No rounded corners. No compromises.</p>
+        </div>
+        <div class="hero-sub">
+            <div>
+                <span class="f-mono">001 // PHILOSOPHY</span>
+                <h3 style="margin-top: 10px; font-size: 2.5rem;">THE BONE IS THE BEAUTY.</h3>
+            </div>
+            <p>Reject the polished veneer of corporate aesthetics. Embrace the visible grid, the raw joint, and the high-toner smear.</p>
+        </div>
+    </div>
+
+    <div class="scroll-text">
+        <div class="scroll-inner">
+            FUNCTION OVER FORM — SYSTEM STABILITY GUARANTEED — RAW CSS ARCHITECTURE — NO FRAMEWORKS DETECTED — 100% VISIBLE LOGIC — FUNCTION OVER FORM — SYSTEM STABILITY GUARANTEED — RAW CSS ARCHITECTURE — NO FRAMEWORKS DETECTED — 100% VISIBLE LOGIC —
+        </div>
+    </div>
+
+    <section class="manifesto">
+        <div>
+            <h2>HONESTY IN<br>LAYOUT.</h2>
+        </div>
+        <div class="manifesto-text">
+            <p>Modern web design has become a sea of soft shadows and pill-shaped buttons. <strong>Skeleton_01</strong> returns to the fundamentals of structural engineering. We expose the scaffolding. We use high-contrast interfaces that don't apologize for their complexity.</p>
+            <br>
+            <p>Our components are built on a 12-column concrete grid, ensuring that every pixel serves a functional purpose. This is not a "skin" — it is the system itself.</p>
+            <a href="#" class="btn-raw">Download Spec Sheet</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-item">
+            <span class="feature-num">01 / PERF</span>
+            <h3>ULTRA-LOW LATENCY</h3>
+            <p style="margin-top: 15px; font-size: 0.8rem;">Optimized for terminal-speed interactions and minimal DOM overhead.</p>
+        </div>
+        <div class="feature-item">
+            <span class="feature-num">02 / CORE</span>
+            <h3>MONO-GRID LOGIC</h3>
+            <p style="margin-top: 15px; font-size: 0.8rem;">Alignment is intentional. Errors are visible. Logic is absolute.</p>
+        </div>
+        <div class="feature-item">
+            <span class="feature-num">03 / TYPE</span>
+            <h3>INK-TRAP FONT</h3>
+            <p style="margin-top: 15px; font-size: 0.8rem;">Utilizing industrial sans and monospaced types for maximum legibility.</p>
+        </div>
+        <div class="feature-item">
+            <span class="feature-num">04 / CSS</span>
+            <h3>ZERO JS LOAD</h3>
+            <p style="margin-top: 15px; font-size: 0.8rem;">Layouts driven by native CSS Grid and custom properties only.</p>
+        </div>
+    </section>
+
+    <div class="data-dense">
+        <aside class="data-sidebar">
+            <p>SYSTEM_LOG_v4.0.1</p>
+            <p>TIMESTAMP: 2023.11.04</p>
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--ink);">
+            <p>Active Nodes: 1,402</p>
+            <p>Uptime: 99.982%</p>
+            <p>Thermal: Nominal</p>
+        </aside>
+        <div class="data-content">
+            <div class="data-cell">
+                <h4 class="text-accent">STRUCTURAL INTEGRITY</h4>
+                <p style="margin-top: 10px;">Our layout engine calculates container constraints using raw fractional units (fr), eliminating the need for padding hacks or overflow containers. The skeleton is rigid yet responsive.</p>
+            </div>
+            <div class="data-cell">
+                <h4>DATA DENSITY</h4>
+                <p style="margin-top: 10px;">We prioritize information over whitespace. By utilizing high-density grids, we can display 400% more actionable data than standard corporate dashboards.</p>
+            </div>
+            <div class="data-cell">
+                <h4>IMPERFECT ALIGNMENT</h4>
+                <p style="margin-top: 10px;">Small offsets (1px - 2px) are used throughout the design to create a "human-built" feel, mimicking manual drafting and architectural blueprints.</p>
+            </div>
+            <div class="data-cell">
+                <h4>HIGH TONER</h4>
+                <p style="margin-top: 10px;">The visual language is inspired by early Xerox machines and architectural blueprints. Heavy blacks and stark greys define the depth of the interface.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="diagram-container">
+        <h2 style="text-align: center; margin-bottom: 40px;">System_Topology.svg</h2>
+        <svg class="skeleton-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="780" height="380" stroke="black" stroke-width="2"/>
+            <path d="M10 200H790" stroke="black" stroke-width="1" stroke-dasharray="10 10"/>
+            <circle cx="200" cy="200" r="40" stroke="black" stroke-width="2" fill="white"/>
+            <circle cx="400" cy="200" r="60" stroke="black" stroke-width="2" fill="#ff4d00"/>
+            <circle cx="600" cy="200" r="40" stroke="black" stroke-width="2" fill="white"/>
+            <line x1="240" y1="200" x2="340" y2="200" stroke="black" stroke-width="2"/>
+            <line x1="460" y1="200" x2="560" y2="200" stroke="black" stroke-width="2"/>
+            <text x="180" y="260" font-family="Space Mono" font-size="12" fill="black">INPUT.A</text>
+            <text x="375" y="285" font-family="Space Mono" font-size="12" fill="black">CORE_PROCESS</text>
+            <text x="580" y="260" font-family="Space Mono" font-size="12" fill="black">OUTPUT.Z</text>
+        </svg>
+    </section>
+
+    <section style="padding: 80px 20px;">
+        <table class="pricing">
+            <thead>
+                <tr>
+                    <th>LEVEL_01<br><span style="font-size: 0.8rem; font-weight: 400;">OBSERVER</span></th>
+                    <th>LEVEL_02<br><span style="font-size: 0.8rem; font-weight: 400;">OPERATOR</span></th>
+                    <th>LEVEL_03<br><span style="font-size: 0.8rem; font-weight: 400;">ARCHITECT</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>Read-only access</li>
+                            <li>Public repo entry</li>
+                            <li>Community support</li>
+                        </ul>
+                        <span class="price-val">$0</span>
+                        <a href="#" class="btn-raw">Get Key</a>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Full API access</li>
+                            <li>Commercial usage</li>
+                            <li>Custom grid configs</li>
+                        </ul>
+                        <span class="price-val">$49</span>
+                        <a href="#" class="btn-raw">Deploy</a>
+                    </td>
+                    <td class="bg-ink">
+                        <ul style="color: var(--bg);">
+                            <li>Full source code</li>
+                            <li>Priority protocols</li>
+                            <li>System governance</li>
+                        </ul>
+                        <span class="price-val" style="color: var(--accent);">$999</span>
+                        <a href="#" class="btn-raw" style="border-color: var(--bg); color: var(--bg);">Establish Node</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h2 style="font-size: 3rem; margin-bottom: 20px;">JOIN THE<br>SKELETON.</h2>
+                <input type="email" placeholder="EMAIL_ADDRESS" class="big-input">
+                <br><br>
+                <button class="btn-raw" style="border-color: white; color: white;">Submit Protocol</button>
+            </div>
+            <div>
+                <p class="text-accent">DIRECTORIES</p>
+                <ul style="list-style: none; margin-top: 20px; line-height: 2;">
+                    <li>/root/architecture</li>
+                    <li>/root/manifesto</li>
+                    <li>/root/components</li>
+                    <li>/root/licensing</li>
+                </ul>
+            </div>
+            <div>
+                <p class="text-accent">SOCIALS</p>
+                <ul style="list-style: none; margin-top: 20px; line-height: 2;">
+                    <li>Github_</li>
+                    <li>Twitter_</li>
+                    <li>Are.na_</li>
+                    <li>Figma_</li>
+                </ul>
+            </div>
+        </div>
+        <div style="margin-top: 100px; padding-top: 20px; border-top: 1px solid #333; font-size: 0.7rem; display: flex; justify-content: space-between;">
+            <p>© 2024 SKELETON_01 SYSTEM. ALL RIGHTS RESERVED.</p>
+            <p>BUILT BY FLASH_UI // VERSION 1.0.0-BETA</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple hover interaction for depth
+        document.querySelectorAll('.cell, .feature-item').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                el.style.setProperty('--x', `${x}px`);
+                el.style.setProperty('--y', `${y}px`);
+            });
+        });
+
+        // Parallax effect on title
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroTitle = document.querySelector('.hero-title');
+            if(heroTitle) {
+                heroTitle.style.transform = `translateY(${scrolled * 0.1}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crimson Kinetic Tension - VibeUI</title>
+    <style>
+        body { margin: 0; padding: 0; background: #09090b; min-height: 100vh; display: grid; place-items: center; color: white; font-family: sans-serif; }
+    </style>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tensile Kinetic UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --accent: #ff3e00;
+            --accent-soft: rgba(255, 62, 0, 0.1);
+            --text-main: #f0f0f0;
+            --text-dim: #666;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --ease-recoil: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+            --ease-tension: cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- BACKGROUND KINETICS --- */
+        .tensile-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .line {
+            position: absolute;
+            background: var(--text-dim);
+            transition: transform 0.6s var(--ease-recoil);
+        }
+
+        .line-h { height: 1px; width: 100%; left: 0; transform-origin: center; }
+        .line-v { width: 1px; height: 100%; top: 0; transform-origin: center; }
+
+        /* --- CURSOR SYSTEM --- */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s linear;
+        }
+
+        #cursor-follower {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.25s var(--ease-recoil);
+        }
+
+        /* --- INTERFACE LAYOUT --- */
+        .main-frame {
+            position: relative;
+            z-index: 10;
+            width: 90vw;
+            height: 80vh;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 4rem;
+            align-items: end;
+        }
+
+        /* --- KINETIC ELEMENTS --- */
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 10rem);
+            font-weight: 800;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+
+        .hero-title span {
+            display: block;
+            transition: transform 0.5s var(--ease-recoil), filter 0.3s ease;
+        }
+
+        .hero-title span:hover {
+            transform: skewX(-15deg) translateX(20px);
+            color: var(--accent);
+        }
+
+        .recoil-card {
+            background: var(--surface);
+            border: 1px solid #1a1a1a;
+            padding: 2.5rem;
+            position: relative;
+            transition: transform 0.6s var(--ease-recoil), border-color 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .recoil-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-20px) rotateX(5deg);
+        }
+
+        .recoil-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: var(--accent);
+            z-index: -1;
+            transform: scale(0.95);
+            transition: transform 0.4s var(--ease-recoil);
+        }
+
+        .recoil-card:hover::before {
+            transform: scale(1.02) translate(10px, 10px);
+        }
+
+        .data-stream {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .data-point {
+            display: inline-block;
+            animation: flicker 2s infinite steps(2);
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .action-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .action-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s var(--ease-recoil);
+        }
+
+        .action-item:hover {
+            padding-left: 1rem;
+            border-bottom-color: var(--accent);
+        }
+
+        .action-item .label {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .action-item .value {
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .tensile-button {
+            margin-top: 2rem;
+            width: 100%;
+            padding: 1.2rem;
+            background: none;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-weight: 800;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+
+        .tensile-button:hover {
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .tensile-button .fill {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            z-index: -1;
+            transition: transform 0.4s var(--ease-recoil);
+        }
+
+        .tensile-button:hover .fill {
+            transform: translateY(-100%);
+        }
+
+        /* --- DECORATIVE STRING --- */
+        #string-svg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        path {
+            stroke: var(--accent-soft);
+            stroke-width: 1;
+            fill: none;
+            transition: d 0.2s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+
+    <div class="tensile-grid" id="grid"></div>
+
+    <svg id="string-svg">
+        <path id="elastic-path" d="" />
+    </svg>
+
+    <main class="main-frame">
+        <section class="hero-content">
+            <h1 class="hero-title">
+                <span data-recoil="0.1">Kinetic</span>
+                <span data-recoil="0.2">Recoil</span>
+                <span data-recoil="0.3">Engine</span>
+            </h1>
+        </section>
+
+        <section class="sidebar">
+            <div class="recoil-card">
+                <div class="data-stream">
+                    <span class="data-point">STATUS: NOMINAL</span>
+                    <span class="data-point" id="time-code">00:00:00:00</span>
+                </div>
+                
+                <h2 style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em;">SYSTEM_TENSION</h2>
+                
+                <ul class="action-list">
+                    <li class="action-item">
+                        <span class="label">Potential</span>
+                        <span class="value">88.4kJ</span>
+                    </li>
+                    <li class="action-item">
+                        <span class="label">Elasticity</span>
+                        <span class="value">0.92</span>
+                    </li>
+                    <li class="action-item">
+                        <span class="label">Friction</span>
+                        <span class="value">Low</span>
+                    </li>
+                </ul>
+
+                <button class="tensile-button">
+                    Initiate Snapback
+                    <div class="fill"></div>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        const grid = document.getElementById('grid');
+        const elasticPath = document.getElementById('elastic-path');
+        const timeCode = document.getElementById('time-code');
+
+        let mouseX = 0, mouseY = 0;
+        let followX = 0, followY = 0;
+
+        // Initialize Grid
+        for(let i = 0; i < 15; i++) {
+            const hLine = document.createElement('div');
+            hLine.className = 'line line-h';
+            hLine.style.top = `${(i + 1) * 6.6}%`;
+            grid.appendChild(hLine);
+
+            const vLine = document.createElement('div');
+            vLine.className = 'line line-v';
+            vLine.style.left = `${(i + 1) * 6.6}%`;
+            grid.appendChild(vLine);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Cursor movement
+            cursor.style.transform = `translate3d(${mouseX - 10}px, ${mouseY - 10}px, 0)`;
+            
+            // Tensile effect on grid lines
+            const lines = document.querySelectorAll('.line');
+            lines.forEach(line => {
+                const rect = line.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const dist = Math.hypot(mouseX - centerX, mouseY - centerY);
+                
+                if (dist < 300) {
+                    const power = (300 - dist) / 300;
+                    const move = power * 20;
+                    if(line.classList.contains('line-h')) {
+                        line.style.transform = `translateY(${(mouseY - centerY) * power * 0.5}px) scaleY(${1 + power})`;
+                    } else {
+                        line.style.transform = `translateX(${(mouseX - centerX) * power * 0.5}px) scaleX(${1 + power})`;
+                    }
+                } else {
+                    line.style.transform = `translate(0,0) scale(1)`;
+                }
+            });
+
+            // Update elastic path
+            const tensionPointX = mouseX;
+            const tensionPointY = mouseY;
+            elasticPath.setAttribute('d', `M 0 ${window.innerHeight/2} Q ${tensionPointX} ${tensionPointY} ${window.innerWidth} ${window.innerHeight/2}`);
+        });
+
+        // Smooth follower recoil
+        function animate() {
+            followX += (mouseX - followX) * 0.15;
+            followY += (mouseY - followY) * 0.15;
+            
+            const dx = mouseX - followX;
+            const dy = mouseY - followY;
+            const rotation = Math.atan2(dy, dx) * 180 / Math.PI;
+            const squeeze = Math.min(Math.hypot(dx, dy) / 50, 1.5);
+
+            follower.style.transform = `translate3d(${followX - 30}px, ${followY - 30}px, 0) rotate(${rotation}deg) scale(${1 + squeeze}, ${1 - squeeze * 0.5})`;
+            
+            // Update Timecode
+            const now = new Date();
+            timeCode.innerText = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}:${Math.floor(now.getMilliseconds()/10)}`;
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Parallax Recoil on text
+        document.querySelectorAll('.hero-title span').forEach(span => {
+            span.addEventListener('mousemove', (e) => {
+                const rect = span.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                span.style.transform = `translate3d(${x * 40}px, ${y * 20}px, 0) skewX(${x * 10}deg)`;
+            });
+            span.addEventListener('mouseleave', () => {
+                span.style.transform = `translate3d(0,0,0) skewX(0)`;
+            });
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
