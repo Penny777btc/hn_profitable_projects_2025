@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 3.1 Desktop</title>
+    <style>
+        :root {
+            --win-bg: #C0C0C0;
+            --win-white: #FFFFFF;
+            --win-gray: #808080;
+            --win-dark-gray: #404040;
+            --win-blue: #000080;
+            --win-border-light: #dfdfdf;
+            --win-border-dark: #808080;
+            --win-text: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #008080; /* Classic Teal Desktop */
+            font-family: "MS Sans Serif", Tahoma, Verdana, Arial, sans-serif;
+            font-size: 11px;
+        }
+
+        /* Bevel Utils */
+        .outset {
+            border: 2px solid;
+            border-top-color: var(--win-white);
+            border-left-color: var(--win-white);
+            border-right-color: var(--win-gray);
+            border-bottom-color: var(--win-gray);
+        }
+
+        .inset {
+            border: 2px solid;
+            border-top-color: var(--win-gray);
+            border-left-color: var(--win-gray);
+            border-right-color: var(--win-white);
+            border-bottom-color: var(--win-white);
+            background-color: var(--win-white);
+        }
+
+        .button-active {
+            border-top-color: var(--win-gray) !important;
+            border-left-color: var(--win-gray) !important;
+            border-right-color: var(--win-white) !important;
+            border-bottom-color: var(--win-white) !important;
+        }
+
+        /* Desktop Environment */
+        #desktop {
+            width: 100vw;
+            height: calc(100vh - 32px);
+            position: relative;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 20px;
+        }
+
+        .desktop-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            color: white;
+            text-shadow: 1px 1px 0px #000;
+        }
+
+        .desktop-icon:active .icon-label {
+            background-color: var(--win-blue);
+            outline: 1px dotted white;
+        }
+
+        .icon-graphic {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 4px;
+            image-rendering: pixelated;
+        }
+
+        .icon-label {
+            padding: 2px 4px;
+            word-wrap: break-word;
+        }
+
+        /* Taskbar */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 32px;
+            background: var(--win-bg);
+            border-top: 2px solid var(--win-white);
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            z-index: 9999;
+        }
+
+        .task-item {
+            height: 24px;
+            min-width: 100px;
+            margin-right: 4px;
+            padding: 0 8px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            background: var(--win-bg);
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .task-item.active {
+            background: #e0e0e0;
+            border-top-color: var(--win-gray);
+            border-left-color: var(--win-gray);
+            border-right-color: var(--win-white);
+            border-bottom-color: var(--win-white);
+        }
+
+        /* Window System */
+        .window {
+            position: absolute;
+            background: var(--win-bg);
+            min-width: 200px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .title-bar {
+            height: 20px;
+            background: var(--win-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            cursor: default;
+        }
+
+        .window.inactive .title-bar {
+            background: var(--win-gray);
+        }
+
+        .title-text {
+            flex-grow: 1;
+            font-weight: bold;
+            padding-left: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .title-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .win-btn {
+            width: 16px;
+            height: 14px;
+            background: var(--win-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: bold;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .win-btn svg {
+            width: 10px;
+            height: 10px;
+        }
+
+        .menu-bar {
+            display: flex;
+            padding: 2px 4px;
+            border-bottom: 1px solid var(--win-gray);
+        }
+
+        .menu-item {
+            padding: 2px 6px;
+            cursor: default;
+        }
+
+        .menu-item:first-letter {
+            text-decoration: underline;
+        }
+
+        .window-content {
+            flex-grow: 1;
+            padding: 8px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Small Biz Manager Layout */
+        .biz-container {
+            display: flex;
+            flex-grow: 1;
+            gap: 8px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .tree-view {
+            width: 160px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .list-view-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .search-box {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .search-box input {
+            flex-grow: 1;
+            height: 20px;
+            border: 2px solid;
+            border-top-color: var(--win-gray);
+            border-left-color: var(--win-gray);
+            border-right-color: var(--win-white);
+            border-bottom-color: var(--win-white);
+            padding: 0 4px;
+            font-family: inherit;
+        }
+
+        .list-view {
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background: var(--win-bg);
+            z-index: 10;
+        }
+
+        th {
+            text-align: left;
+            padding: 4px;
+            border: 1px solid var(--win-gray);
+            background: var(--win-bg);
+            font-weight: normal;
+        }
+
+        td {
+            padding: 4px;
+            border-right: 1px solid #eee;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr.selected {
+            background-color: var(--win-blue) !important;
+            color: white;
+        }
+
+        .tree-item {
+            padding: 2px 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tree-item.selected {
+            background: var(--win-blue);
+            color: white;
+        }
+
+        /* Details Window Specifics */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 8px;
+        }
+
+        .label { font-weight: bold; }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+        ::-webkit-scrollbar-track {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpiYGBgYHBxcfEHYmYgYAAAMwAByU99vQAAAABJRU5ErkJggg==");
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--win-bg);
+            border: 2px solid;
+            border-top-color: var(--win-white);
+            border-left-color: var(--win-white);
+            border-right-color: var(--win-gray);
+            border-bottom-color: var(--win-gray);
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="desktop">
+    <!-- Static Desktop Icons -->
+    <div class="desktop-icon" onclick="openProgramManager()">
+        <div class="icon-graphic">
+            <svg viewBox="0 0 32 32"><rect width="32" height="32" fill="none"/><path d="M4 4h24v24H4z" fill="#fff"/><path d="M4 4h24v2H4zM4 4h2v24H4z" fill="#808080"/><path d="M26 4h2v24h-2zM4 26h24v2H4z" fill="#404040"/><path d="M8 8h6v6H8zM18 8h6v6h-6zM8 18h6v6H8zM18 18h6v6h-6z" fill="#000080"/></svg>
+        </div>
+        <div class="icon-label">Progman</div>
+    </div>
+
+    <div class="desktop-icon" onclick="openApp()">
+        <div class="icon-graphic">
+            <svg viewBox="0 0 32 32"><path d="M2 6h28v20H2z" fill="#fff"/><path d="M2 6h28v2H2zm0 0h2v20H2z" fill="#808080"/><path d="M4 10h24v2H4zm0 4h24v2H4zm0 4h24v2H4z" fill="#000080"/></svg>
+        </div>
+        <div class="icon-label">Small Biz Manager</div>
+    </div>
+</div>
+
+<div id="taskbar" class="outset">
+    <!-- Buttons dynamically added here -->
+</div>
+
+<script>
+    const BUSINESS_DATA = [
+        { id: 1, category: "Micro SaaS", name: "Alt-Text Automator", model: "Subscription", difficulty: 2, time: "14d", notes: "AI-driven image accessibility for Shopify store owners.", cost: "$50/mo", channels: "Shopify App Store", for: "E-commerce owners" },
+        { id: 2, category: "Newsletters", name: "The Prompt Engineer", model: "Ads", difficulty: 3, time: "30d", notes: "Weekly breakdown of LLM techniques for developers.", cost: "$0", channels: "Twitter, LinkedIn", for: "Developers" },
+        { id: 3, category: "Templates / Design Assets", name: "UX Wireframe Kit", model: "One-time", difficulty: 1, time: "7d", notes: "Figma components for rapid prototyping.", cost: "$29", channels: "Gumroad, UI8", for: "Product Designers" },
+        { id: 4, category: "AI Tools", name: "LogoGenius", model: "One-time", difficulty: 4, time: "60d", notes: "Stable Diffusion wrapper specifically for vector-style logos.", cost: "$200/mo API", channels: "Product Hunt", for: "Early stage startups" },
+        { id: 5, category: "Services / Agencies", name: "ShortForm Cutters", model: "Services", difficulty: 2, time: "10d", notes: "Turning long podcasts into TikToks and Reels.", cost: "$0", channels: "Cold Outreach", for: "Podcasters" },
+        { id: 6, category: "Content / Media", name: "Retro Synth Samples", model: "Affiliate", difficulty: 2, time: "30d", notes: "Curated library of 80s synth sounds with affiliate gear links.", cost: "$20", channels: "YouTube, Forums", for: "Music Producers" },
+        { id: 7, category: "Micro SaaS", name: "Testimonial Collector", model: "Subscription", difficulty: 3, time: "45d", notes: "Simple widget to embed customer praise on landing pages.", cost: "$100/mo", channels: "IndieHackers", for: "SaaS Founders" },
+        { id: 8, category: "Templates / Design Assets", name: "Ghost Theme: Minimal", model: "One-time", difficulty: 3, time: "21d", notes: "High-performance theme for professional writers.", cost: "$79", channels: "Ghost Marketplace", for: "Bloggers" },
+        { id: 9, category: "Newsletters", name: "Remote Java Jobs", model: "Subscription", difficulty: 2, time: "14d", notes: "Paid newsletter with hand-curated high-salary Java roles.", cost: "$10/mo", channels: "Job Boards", for: "Java Engineers" },
+        { id: 10, category: "AI Tools", name: "SQL Whisperer", model: "Subscription", difficulty: 4, time: "90d", notes: "Natural language to complex SQL queries interface.", cost: "$400/mo", channels: "Direct Sales", for: "Data Analysts" },
+        { id: 11, category: "Micro SaaS", name: "BioLink Pro", model: "Subscription", difficulty: 2, time: "15d", notes: "Customizable link-in-bio tool for musicians.", cost: "$30/mo", channels: "Instagram", for: "Artists" },
+        { id: 12, category: "Services / Agencies", name: "Ghostwriting.io", model: "Services", difficulty: 4, time: "30d", notes: "Thought leadership content for VCs and CEOs.", cost: "$0", channels: "LinkedIn", for: "Executives" }
+    ];
+
+    const CATEGORIES = [
+        "All Categories",
+        "Content / Media",
+        "AI Tools",
+        "Templates / Design Assets",
+        "Newsletters",
+        "Micro SaaS",
+        "Services / Agencies"
+    ];
+
+    let zIndexCounter = 100;
+    let windows = [];
+    let activeCategory = "All Categories";
+    let searchQuery = "";
+
+    // --- Audio Context ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep(freq = 440, duration = 0.05) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = freq;
+        gain.gain.value = 0.1;
+        osc.start();
+        setTimeout(() => osc.stop(), duration * 1000);
+    }
+
+    // --- Window Management ---
+    function createWindow(config) {
+        beep(600, 0.02);
+        const winId = 'win-' + Math.random().toString(36).substr(2, 9);
+        const win = document.createElement('div');
+        win.id = winId;
+        win.className = 'window outset';
+        win.style.left = (50 + (windows.length * 25)) + 'px';
+        win.style.top = (50 + (windows.length * 25)) + 'px';
+        win.style.width = config.width || '400px';
+        win.style.height = config.height || '300px';
+        win.style.zIndex = ++zIndexCounter;
+
+        win.innerHTML = `
+            <div class="title-bar">
+                <div class="win-btn outset control-menu" style="margin-right: 2px;"><svg viewBox="0 0 10 10"><rect y="4" width="10" height="2" fill="black"/></svg></div>
+                <div class="title-text">${config.title}</div>
+                <div class="title-controls">
+                    <div class="win-btn outset min-btn">▲</div>
+                    <div class="win-btn outset close-btn">■</div>
+                </div>
+            </div>
+            ${config.menu ? `<div class="menu-bar">${config.menu.map(m => `<div class="menu-item"><span>${m}</span></div>`).join('')}</div>` : ''}
+            <div class="window-content inset">
+                ${config.content}
+            </div>
+        `;
+
+        document.body.appendChild(win);
+        
+        const winObj = { id: winId, title: config.title, el: win, minimized: false };
+        windows.push(winObj);
+
+        // Events
+        win.addEventListener('mousedown', () => focusWindow(winId));
+        win.querySelector('.close-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeWindow(winId);
+        });
+        win.querySelector('.min-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            minimizeWindow(winId);
+        });
+        
+        makeDraggable(win);
+        updateTaskbar();
+        focusWindow(winId);
+
+        if (config.onRender) config.onRender(win);
+        return winId;
+    }
+
+    function focusWindow(id) {
+        windows.forEach(w => {
+            w.el.classList.add('inactive');
+            if (w.id === id) {
+                w.el.classList.remove('inactive');
+                w.el.style.zIndex = ++zIndexCounter;
+                w.el.style.display = 'flex';
+                w.minimized = false;
+            }
+        });
+        updateTaskbar();
+    }
+
+    function closeWindow(id) {
+        beep(300, 0.05);
+        const winObj = windows.find(w => w.id === id);
+        if (winObj) {
+            winObj.el.remove();
+            windows = windows.filter(w => w.id !== id);
+        }
+        updateTaskbar();
+    }
+
+    function minimizeWindow(id) {
+        const winObj = windows.find(w => w.id === id);
+        if (winObj) {
+            winObj.minimized = true;
+            winObj.el.style.display = 'none';
+        }
+        updateTaskbar();
+    }
+
+    function makeDraggable(el) {
+        const titleBar = el.querySelector('.title-bar');
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+        titleBar.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            if (e.target.classList.contains('win-btn')) return;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            
+            let newTop = el.offsetTop - pos2;
+            let newLeft = el.offsetLeft - pos1;
+
+            // Boundary check
+            if (newTop < 0) newTop = 0;
+            if (newTop > window.innerHeight - 50) newTop = window.innerHeight - 50;
+
+            el.style.top = newTop + "px";
+            el.style.left = newLeft + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+    function updateTaskbar() {
+        const bar = document.getElementById('taskbar');
+        bar.innerHTML = '';
+        windows.forEach(w => {
+            const btn = document.createElement('div');
+            btn.className = 'task-item outset' + (w.el.style.display !== 'none' && !w.el.classList.contains('inactive') ? ' active' : '');
+            btn.innerText = w.title;
+            btn.onclick = () => focusWindow(w.id);
+            bar.appendChild(btn);
+        });
+    }
+
+    // --- App Logic: Small Biz Manager ---
+    function openApp() {
+        const existing = windows.find(w => w.title === "Small Biz Manager");
+        if (existing) return focusWindow(existing.id);
+
+        createWindow({
+            title: "Small Biz Manager",
+            width: '700px',
+            height: '450px',
+            menu: ["File", "Options", "Window", "Help"],
+            content: `
+                <div class="biz-container">
+                    <div class="tree-view inset" id="tree-container"></div>
+                    <div class="list-view-container">
+                        <div class="search-box">
+                            <label>Search:</label>
+                            <input type="text" id="biz-search" placeholder="Filter businesses...">
+                        </div>
+                        <div class="list-view inset">
+                            <table id="biz-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Model</th>
+                                        <th>Diff</th>
+                                        <th>Time</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="biz-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `,
+            onRender: (win) => {
+                renderTree(win);
+                renderList(win);
+                const searchInput = win.querySelector('#biz-search');
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value.toLowerCase();
+                    renderList(win);
+                });
+            }
+        });
+    }
+
+    function renderTree(win) {
+        const container = win.querySelector('#tree-container');
+        container.innerHTML = CATEGORIES.map(cat => `
+            <div class="tree-item ${activeCategory === cat ? 'selected' : ''}" onclick="filterCat('${cat}')">
+                <span style="font-size: 14px;">${cat === 'All Categories' ? '📁' : '📄'}</span>
+                ${cat}
+            </div>
+        `).join('');
+    }
+
+    window.filterCat = (cat) => {
+        activeCategory = cat;
+        const win = windows.find(w => w.title === "Small Biz Manager").el;
+        renderTree(win);
+        renderList(win);
+    }
+
+    function renderList(win) {
+        const body = win.querySelector('#biz-body');
+        const filtered = BUSINESS_DATA.filter(b => {
+            const matchesCat = activeCategory === "All Categories" || b.category === activeCategory;
+            const matchesSearch = b.name.toLowerCase().includes(searchQuery) || b.notes.toLowerCase().includes(searchQuery);
+            return matchesCat && matchesSearch;
+        });
+
+        body.innerHTML = filtered.map(b => `
+            <tr onclick="openDetails(${b.id})">
+                <td>${b.name}</td>
+                <td>${b.model}</td>
+                <td>${"★".repeat(b.difficulty)}</td>
+                <td>${b.time}</td>
+                <td style="font-style: italic; color: #444;">${b.notes}</td>
+            </tr>
+        `).join('');
+    }
+
+    window.openDetails = (id) => {
+        const biz = BUSINESS_DATA.find(b => b.id === id);
+        createWindow({
+            title: `Details - ${biz.name}`,
+            width: '350px',
+            height: '250px',
+            content: `
+                <div class="details-grid">
+                    <div class="label">Name:</div><div>${biz.name}</div>
+                    <div class="label">Category:</div><div>${biz.category}</div>
+                    <div class="label">Revenue:</div><div>${biz.model}</div>
+                    <div class="label">Startup:</div><div>${biz.cost}</div>
+                    <div class="label">Channels:</div><div>${biz.channels}</div>
+                    <div class="label">Target:</div><div>${biz.for}</div>
+                </div>
+                <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--win-gray);">
+                    <strong>Overview:</strong><br>
+                    This business focuses on ${biz.notes.toLowerCase()} It is designed for ${biz.for.toLowerCase()} looking to start with a timeline of approximately ${biz.time}.
+                </div>
+            `
+        });
+    };
+
+    function openProgramManager() {
+        const existing = windows.find(w => w.title === "Program Manager");
+        if (existing) return focusWindow(existing.id);
+
+        createWindow({
+            title: "Program Manager",
+            width: '400px',
+            height: '280px',
+            menu: ["File", "Options", "Window", "Help"],
+            content: `
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 10px;">
+                    <div class="desktop-icon" onclick="openApp()" style="color: black; text-shadow: none;">
+                        <div class="icon-graphic">
+                            <svg viewBox="0 0 32 32"><path d="M2 6h28v20H2z" fill="#fff"/><path d="M2 6h28v2H2zm0 0h2v20H2z" fill="#808080"/><path d="M4 10h24v2H4zm0 4h24v2H4zm0 4h24v2H4z" fill="#000080"/></svg>
+                        </div>
+                        <div class="icon-label">Small Biz Manager</div>
+                    </div>
+                    <div class="desktop-icon" onclick="alert('ReadMe.txt: Welcome to the Retro Biz Manager. Built with 100% Vanilla JS.')" style="color: black; text-shadow: none;">
+                        <div class="icon-graphic">
+                            <svg viewBox="0 0 32 32"><path d="M6 4h16l6 6v18H6z" fill="#fff"/><path d="M6 4h16v6h6" fill="none" stroke="#000" stroke-width="1"/><path d="M10 14h12M10 18h12M10 22h8" stroke="#000" stroke-width="1"/></svg>
+                        </div>
+                        <div class="icon-label">Read Me</div>
+                    </div>
+                    <div class="desktop-icon" onclick="alert('System Busy: Minesweeper.exe is missing a DLL.')" style="color: black; text-shadow: none;">
+                        <div class="icon-graphic">
+                            <svg viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" fill="#C0C0C0"/><path d="M8 8h16v16H8z" fill="#000"/><circle cx="16" cy="16" r="4" fill="red"/></svg>
+                        </div>
+                        <div class="icon-label">Minesweeper</div>
+                    </div>
+                </div>
+            `
+        });
+    }
+
+    // Initial Start
+    window.onload = () => {
+        openProgramManager();
+    };
+
+</script>
+</body>
+</html>

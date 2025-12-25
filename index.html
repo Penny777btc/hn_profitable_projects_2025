@@ -4,64 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Small & Beautiful | HN Profitable Projects Showcase</title>
-    <meta name="description"
-        content="A curated collection of 80 profitable small-scale projects from Hacker News (2017-2024).">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@300;500;800&display=swap"
-        rel="stylesheet">
+    <title>HN Projects Showcase 2025 (Win 3.1)</title>
     <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
 </head>
 
-<body data-lang="en">
-    <!-- KINETIC ELEMENTS -->
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
-    <div class="kinetic-bg">
-        <div class="tensile-grid" id="grid"></div>
-        <svg id="string-svg"
-            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;">
-            <path id="elastic-path" d="" stroke="rgba(255, 62, 0, 0.1)" stroke-width="1" fill="none" />
-        </svg>
+<body>
+
+    <div id="desktop">
+        <!-- Static Desktop Icons -->
+        <div class="desktop-icon" onclick="openProgramManager()">
+            <div class="icon-graphic">
+                <svg viewBox="0 0 32 32">
+                    <rect width="32" height="32" fill="none" />
+                    <path d="M4 4h24v24H4z" fill="#fff" />
+                    <path d="M4 4h24v2H4zM4 4h2v24H4z" fill="#808080" />
+                    <path d="M26 4h2v24h-2zM4 26h24v2H4z" fill="#404040" />
+                    <path d="M8 8h6v6H8zM18 8h6v6h-6zM8 18h6v6H8zM18 18h6v6h-6z" fill="#000080" />
+                </svg>
+            </div>
+            <div class="icon-label">Progman</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openProjectsShowcase()">
+            <div class="icon-graphic">
+                <svg viewBox="0 0 32 32">
+                    <path d="M2 6h28v20H2z" fill="#fff" />
+                    <path d="M2 6h28v2H2zm0 0h2v20H2z" fill="#808080" />
+                    <path d="M4 10h24v2H4zm0 4h24v2H4zm0 4h24v2H4z" fill="#000080" />
+                </svg>
+            </div>
+            <div class="icon-label">HN Projects</div>
+        </div>
     </div>
 
-    <header>
-        <div class="lang-toggle-container">
-            <button id="langToggle" class="btn-lang">SYS_LANG: EN</button>
-        </div>
-        <div class="header-content">
-            <h1 id="mainTitle" class="glitch">
-                <span data-recoil="0.1">SMALL &</span>
-                <span data-recoil="0.2">BEAUTIFUL</span>
-            </h1>
-            <p id="mainSubtitle" class="subtitle">PROJECTS_CHRONICLE_V1.0.8</p>
-            <div class="stats-bar">
-                <div class="stat">PERIOD: <span id="statYears">8+ YEARS</span></div>
-                <div class="stat">THRESHOLD: <span id="statRevenue">$500+</span></div>
-                <div class="stat">UNIT: <span id="statTeam">SOLO_BUILD</span></div>
-            </div>
-        </div>
-    </header>
+    <div id="taskbar" class="outset">
+        <!-- Buttons dynamically added here -->
+    </div>
 
-    <nav class="year-nav" id="yearNav">
-        <!-- Year tabs will be injected here -->
-    </nav>
-
-    <main>
-        <section class="project-grid" id="projectGrid">
-            <!-- Project cards will be injected here -->
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2024 ANTIGRAVITY_AGENT // HARVESTED_FROM_HN</p>
-        </div>
-    </footer>
-
-    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 
