@@ -297,7 +297,7 @@ function populateTags(win) {
 }
 
 function openProjectsShowcase() {
-    const existing = windows.find(w => w.title === "HN Projects Showcase");
+    const existing = windows.find(w => w.title === "HN500");
     if (existing) return focusWindow(existing.id);
 
     // Initial Active Year Logic
@@ -305,7 +305,7 @@ function openProjectsShowcase() {
     if (activeYear === "全部年份" && currentLang === 'en') activeYear = "All Years";
 
     createWindow({
-        title: "HN Projects Showcase",
+        title: "HN500",
         width: '850px',
         height: '500px',
         menu: ["File", "View", "Help"],
@@ -370,7 +370,7 @@ function renderTree(win) {
 
 window.filterYear = (year) => {
     activeYear = year;
-    const winObj = windows.find(w => w.title === "HN Projects Showcase");
+    const winObj = windows.find(w => w.title === "HN500");
     if (winObj) {
         renderTree(winObj.el);
         renderList(winObj.el);
@@ -384,7 +384,7 @@ window.sortBy = (key) => {
         sortState.key = key;
         sortState.asc = true;
     }
-    const winObj = windows.find(w => w.title === "HN Projects Showcase");
+    const winObj = windows.find(w => w.title === "HN500");
     if (winObj) {
         updateHeaderIcons(winObj.el);
         renderList(winObj.el);
@@ -408,7 +408,7 @@ function updateHeaderIcons(win) {
 }
 
 window.filterByTag = (tag) => {
-    const winObj = windows.find(w => w.title === "HN Projects Showcase");
+    const winObj = windows.find(w => w.title === "HN500");
     if (winObj) {
         const input = winObj.el.querySelector('#project-search');
         input.value = tag;
@@ -545,7 +545,7 @@ window.toggleLanguage = () => {
         activeYear = newAllYears;
     }
 
-    const winObj = windows.find(w => w.title === "HN Projects Showcase");
+    const winObj = windows.find(w => w.title === "HN500");
     if (winObj) {
         // Init UI update
         const cols = winObj.el.querySelectorAll('thead th');
@@ -616,7 +616,7 @@ function openProgramManager() {
                     <div class="icon-graphic">
                         <svg viewBox="0 0 32 32"><path d="M2 6h28v20H2z" fill="#fff"/><path d="M2 6h28v2H2zm0 0h2v20H2z" fill="#808080"/><path d="M4 10h24v2H4zm0 4h24v2H4zm0 4h24v2H4z" fill="#000080"/></svg>
                     </div>
-                    <div class="icon-label">HN Projects</div>
+                    <div class="icon-label">HN500</div>
                 </div>
                 <!-- Read Me Mockup -->
                 <div class="desktop-icon" onclick="createDialog('ReadMe.txt', 'This project showcases profitable side projects from Hacker News threads (2017-2025).<br><br>Built with Vanilla JS.', 'info')" style="color: black; text-shadow: none;">
